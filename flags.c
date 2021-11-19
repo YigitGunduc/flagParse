@@ -1,77 +1,51 @@
-/*
- *
- 
- Python implementation
-
-import sys
-
-class Args:
-    def __init__(self):
-        self.flags = []
-        self.desc = []
-        self.values = {}
-
-    def get_flag(self, arg):
-        return self.values.get(arg, None)
-
-    def add_arg(self, arg, desc=''):
-        if arg[:2] != '--':
-            arg = '--' + arg
-
-        self.flags.append(arg)
-        self.desc.append(str(arg) + ' | ' + str(desc))
-
-    def parse(self):
-        self.__parse()
-
-    def __parse(self):
-        args = sys.argv[1:]
-
-        if '--help' in args or '-h' in args:
-            print('help')
-            for i in range(len(self.desc)):
-                print(self.desc[i])
-
-        for i in range(len(self.flags)):
-            for j in range(len(args)):
-                if args[j] == self.flags[i]:
-                    value = args[j + 1]
-                    self.values[args[j]] = value
-
-
-                }
-
-*/
-
-
 #include <stdio.h>
+#include <malloc.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MAX_FLAG_LENGTH 256
 
+typedef enum {
+    FLAG_STR = 0,
+    FLAG_FLOAT,
+    FLAG_BOOL,
+    FLAG_UINT64,
+    FLAG_UINT32,
+    FLAG_DOUBLE,
+} Flag_Type;
 
-void parse_cmdline(int argc, char *argv[])
-{
-}
+typedef struct {
+  char* desc;
+	Flag_Type type;
+	Flag_Type value;
+  char *name;
+} flag_t;
 
-int parser_args(int argc, char *argv[])
+void parser_args(int argc, char *argv[], char flag[])
 {
     for (int i = 1; i < argc; i++) 
     {
-        printf("%s\n", argv[i]);
+      if (strcmp(argv[i], flag) == 0)
+      {
+        puts("found");
+      }
     }
+}
 
+flag_t* add_flag(char *name, char *desc, Flag_Type type)
+{
+  flag_t *flag = malloc(sizeof(flag_t));
+  flag->name = name;
+  flag->desc = desc;
+  flag->type = type;
+
+  return flag;
 }
 
 int main(int argc, char* argv[])
 {
-    parser_args(argc, argv);
+    flag_t* flag = add_flag("flag name", "flag desc", 1);
+    printf("%s\n", flag->name);
 
     return 0;
 }
-
-
-
-
-
-
